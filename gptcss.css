@@ -1,0 +1,64 @@
+#game {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+h1{
+  text-align: center;
+  font-size: 40px;
+
+}
+
+#canvas {
+    border: 1px solid black;
+}
+
+body {
+ /*   background: linear-gradient(to bottom, #ff6ec4, #7873f5);*/
+    background-color: #7873f5;
+ /*   font-family: 'Rosewood Std Regular', cursive;*/
+  }
+  
+ 
+  #game-board {
+    border: 1px solid black;
+  }
+  
+  canvas {
+    border: 1px solid black;
+  }
+  #letters {
+    position: absolute;
+    bottom: 0;
+    font-size: 20px;
+    font-family: "fantasy";
+    color: #FF69B4;
+  }
+
+  #canvas1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  #canvas2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .canvas-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  canvas {
+
+    margin: 0 auto;
+  }
+
+  .canvas-container2 {
+    display: flex;
+    justify-content: center;
+  }
