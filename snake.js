@@ -1,157 +1,184 @@
-var canvas, ctx, gameControl, gameActive;
-// render X times per second
-var x = 8;
+// Set up the canvas and the snake
+var canvas = document.getElementById("game-board");
+var ctx = canvas.getContext("2d");
+var letters = "WILLYOUGOTOPROMWITHME"; //21
+var score = 0;
+const canvas2 = document.getElementById('score-board');
+const ctx2 = canvas2.getContext('2d');
 
-const CANVAS_BORDER_COLOUR = 'black';
-const CANVAS_BACKGROUND_COLOUR = "white";
-const SNAKE_COLOUR = 'lightgreen';
-const SNAKE_BORDER_COLOUR = 'darkgreen';
 
+var snake = [
+  { x: 10, y: 10 },
+  { x: 20, y: 10 },
+  { x: 30, y: 10 },
+  { x: 40, y: 10 },
+];
 
-window.onload = function() {
-  canvas = document.getElementById("canvas");
-  ctx = canvas.getContext("2d");
+var dx = 10;
+var dy = 0;
 
-  document.addEventListener("keydown", keyDownEvent);
+var food = { x: 0, y: 0, letter: "" };
+var eatenLetters = [];
+const question = [];
 
-  gameControl = startGame(x);
-};
+// Generate a new letter and food location
+function generateFood() {
+    console.log("hehe", foodX, foodY, food.letter);
+    var currentLetter = food.letter;
+    var foodX = Math.floor(Math.random() * 32) * 10 + 40;
+    var foodY = Math.floor(Math.random() * 32) * 10 + 40;
 
-/* function to start the game */
-function startGame(x) {
-    // setting gameActive flag to true
-    gameActive = true;
-    document.getElementById("game-status").innerHTML = "<small>Game Started</small>";
-    document.getElementById("game-score").innerHTML = "";
-    return setInterval(draw, 1000 / x);
-}
-
-function pauseGame() {
-    // setting gameActive flag to false
-    clearInterval(gameControl);
-    gameActive = false;
-    document.getElementById("game-status").innerHTML = "<small>Game Paused</small>";
-}
-
-function endGame(x) {
-    // setting gameActive flag to false
-    clearInterval(gameControl);
-    gameActive = false;
-    document.getElementById("game-status").innerHTML = "<small>Game Over</small>";
-    document.getElementById("game-score").innerHTML = "<h1>Score: " + x + "</h1>";
-}
-
-// game world
-var gridSize = (tileSize = 20); // 20 x 20 = 400
-var nextX = (nextY = 0);
-
-// snake
-var defaultTailSize = 3;
-var tailSize = defaultTailSize;
-var snakeTrail = [];
-var snakeX = (snakeY = 10);
-
-// apple
-var appleX = (appleY = 15);
-
-// draw
-function draw() {
-  // move snake in next pos
-  snakeX += nextX;
-  snakeY += nextY;
-
-  // snake over game world?
-  if (snakeX < 0) {
-    snakeX = gridSize - 1;
-  }
-  if (snakeX > gridSize - 1) {
-    snakeX = 0;
-  }
-
-  if (snakeY < 0) {
-    snakeY = gridSize - 1;
-  }
-  if (snakeY > gridSize - 1) {
-    snakeY = 0;
-  }
-
-  //snake bite apple?
-  if (snakeX == appleX && snakeY == appleY) {
-    tailSize++;
-
-    appleX = Math.floor(Math.random() * gridSize);
-    appleY = Math.floor(Math.random() * gridSize);
-  }
-
-  //  Select the colour to fill the canvas
-ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
-//  Select the colour for the border of the canvas
-ctx.strokestyle = CANVAS_BORDER_COLOUR;
-
-// Draw a "filled" rectangle to cover the entire canvas
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-// Draw a "border" around the entire canvas
-ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
-  // paint snake
-  ctx.fillStyle = SNAKE_COLOUR;
-  ctx.strokestyle = SNAKE_BORDER_COLOUR;
-  for (var i = 0; i < snakeTrail.length; i++) {
-    ctx.fillRect(
-      snakeTrail[i].x * tileSize,
-      snakeTrail[i].y * tileSize,
-      tileSize,
-      tileSize
-    );
+    //var foodX = Math.floor(Math.random() * (canvas.width - 40) / 10) *10;
+    //var foodY = Math.floor(Math.random() * (canvas.height - 40) / 10) * 10;
+ 
+    // Generate a random letter from the phrase "will you go to prom with me?"
     
-    ctx.strokeRect(snakeTrail[i].x * tileSize , snakeTrail[i].y* tileSize, tileSize, tileSize);
+    var randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
+  
+    // Check if the letter has already been eaten by the snake
+    while (snake.includes(randomLetter)) {
+      console.log("skajfklsfas",randomLetter);
+      randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+  
+     food = {x: foodX, y: foodY, letter: randomLetter};
+     food.x=foodX;
+     food.y=foodY;
+     food.letter = randomLetter;
+     
+     console.log("hehe", foodX, foodY, food.letter);
+  }
+  generateFood();
 
-    //snake bites it's tail?
-    if (snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
-      if(tailSize > 3) {
-          endGame(tailSize);
+  function drawFood() {
+    ctx.font = "14px Arial";
+    ctx.fillText(food.letter, food.x + 1, food.y + 10);
+    ctx.fill();
+  }
+  
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < snake.length; i++) {
+        ctx.fillRect(snake[i].x, snake[i].y, 10, 10);
       }
-      tailSize = defaultTailSize;  
+    drawFood();
+  
+    // Display the eaten letters in the #letters div
+    var lettersDiv = document.getElementById("letters");
+    if (lettersDiv) {
+      lettersDiv.innerHTML = "Eaten letters: " + snake.join(", ");
+    }
+    // Draw the score
+    score = (snake.length - 4);
+    console.log("score",score);
+  ctx.fillText("Score: " + (snake.length - 4), 10, canvas.height - 10);
+  }
+  
+ 
+// Move the snake
+function moveSnake(food) {
+  // Move the snake
+  var head = { x: snake[0].x + dx, y: snake[0].y + dy };
+  snake.unshift(head);
+
+  // Check if the snake ate the food
+  if (head.x === food.x && head.y === food.y) {
+    eatenLetters.push(food.letter);
+    generateFood();
+  } else {
+    snake.pop();
+  }
+}
+
+// Check if the snake collided with the walls or itself
+function checkCollision() {
+  // Check if the snake hit the walls
+  if (snake[0].x < 0 || snake[0].x >= canvas.width ||
+      snake[0].y < 0 || snake[0].y >= canvas.height) {
+    return true;
+  }
+
+  // Check if the snake hit itself
+  for (var i = 3; i < snake.length; i++) {
+    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+      return true;
     }
   }
 
-  // paint apple
-  ctx.fillStyle = "red";
-  ctx.fillRect(appleX * tileSize, appleY * tileSize, tileSize, tileSize);
+  // No collision detected
+  return false;
+}
 
-  //set snake trail
-  snakeTrail.push({ x: snakeX, y: snakeY });
-  while (snakeTrail.length > tailSize) {
-    snakeTrail.shift();
+// Handle the keydown event to change the direction of the snake
+document.addEventListener("keydown", function(event) {
+  if (event.key === "ArrowLeft" && dx !== 10) {
+    dx = -10;
+    dy= 0;
+  } else if (event.key === "ArrowRight" && dx !== -10) {
+    dx = 10;
+    dy = 0;
+  } else if (event.key === "ArrowUp" && dy !== 10) {
+    dx = 0;
+    dy = -10;
+  } else if (event.key === "ArrowDown" && dy !== -10) {
+    dx = 0;
+    dy = 10;
+  }
+});
+
+function editScoreBoard(){
+  const square = String.fromCodePoint(0x1F7E2);
+  ctx2.fillStyle = 'black';
+  ctx2.font = '20px serif';
+  ctx2.fillRect(20, 20, score * 20, 20);
+  ctx2.fillText(" ?",20*22, 35);
+  //ctx2.fillText(square, score * 50, 50);
+  if (score==21){
+    winGame();
   }
 }
 
-// input
-function keyDownEvent(e) {
-  switch (e.keyCode) {
-    case 37:
-      nextX = -1;
-      nextY = 0;
-      break;
-    case 38:
-      nextX = 0;
-      nextY = -1;
-      break;
-    case 39:
-      nextX = 1;
-      nextY = 0;
-      break;
-    case 40:
-      nextX = 0;
-      nextY = 1;
-      break;
-    case 32:
-      if(gameActive == true) {
-          pauseGame();
-      }
-      else {
-          gameControl = startGame(x);
-      }
-      break;
+
+function winGame(){
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = '40px serif';
+  ctx.textAlign = "center";
+  ctx.fillText("YOU WIN!!",canvas.width/2, canvas.height/2);
+  ctx.font = '20px serif';
+  ctx.fillText("the question is....",canvas.width/2, 280);
+  setTimeout(revealQuestion, 2000);
+  
+ 
+
+}
+
+
+function revealQuestion(){
+   ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+   ctx2.fillStyle = 'black';
+   ctx2.font = '20px serif';
+   ctx.textAlign = "center";
+   ctx2.fillText("W I L L  Y O U  G O  T O  P R O M  W I T H  M E ?",20, 35);
+  
+}
+// Run the game loop
+function gameLoop() {
+   console.log(snake[0].x, snake[0].y, canvas.width, canvas.height);
+console.log(food.x, food.y, food.letter);
+  moveSnake(food);
+ // drawFood();
+  draw();
+  editScoreBoard();
+
+  if (checkCollision()&&score<21) { //!!!CHANGE TO 21
+    alert("Game over!");
+    clearInterval(intervalId);
+  }else if (checkCollision()){
+    clearInterval(intervalId);
   }
 }
+
+
+
+var intervalId = setInterval(gameLoop, 100);

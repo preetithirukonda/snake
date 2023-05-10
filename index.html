@@ -1,94 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <title>Letter Snake Game</title>
+  </head>
+  <body>
+    <h1>SNAKE!!</h1>  
 
-<head>
-    <!-- connecting to the css and js documents -->
-    <title>Snake</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-          crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="main.css">
-    <link rel="shortcut icon" href="aa-favicon.ico">
-</head>
-
-<body>
-
-
-<!-- connecting to js and css-->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
-        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
-        crossorigin="anonymous"></script>
-<script src="main.js"></script>
-<script
-        (
-"keydown", function(e) {
-// space and arrow keys
-if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-e.preventDefault();
-}
-}, false);></script>
-
-
-<!--css styling MAY NOT NEED-->
-<style>
-        .game-box {
-            text-align:center;   
-        }
-        .game-info {
-            text-align:center; 
-            font-family:monospace;
-            line-height:24px;
-        }
+    <div class="canvas-container">
+      <canvas id="game-board" width="480" height="480"></canvas>
+     
+    </div>
+    <div class="canvas-container2">
+      <canvas id="score-board" width="480" height="60"></canvas>
+     
+    </div>
     
-
-</style>
-
-<!-- P - CENTERED HEADER IMAGE -->
-<div class="header-image" style="text-align: center;" padding-top=5000px;>
-    <br><br>
-    <h1> SNAKE </h1>
-  <!--  <img width="320" height="40" 
-    src="https://cdn.discordapp.com/attachments/825412073063448599/855892737802895360/unknown-removebg-preview.png"> -->
- </div>
-
-
-
-<!-- the game and how to play-->
-<div class="container features">
-    <div class="row">
-        <div class="col">
-            <br>
-            <h4 class="feature-title">How to Play</h4>
-            <h5>
-                <ol>
-                    <li>Use the arrow keys to move the snake</li>
-                    <li>Press the spacebar to pause/resume the game</li>
-                </ol>
-                Collect as many apples(red blocks) with your snake(green blocks) as you can by navigating towards it. When the game is over, reload the page to play again.
-            </h5>
-        </div>
-    </div>
-</div>
-<div class="container features">
-    <div class="row">
-        <div class="col">
-        <!--   <h3 class="feature-title">Play Snake!</h3>--> 
-        <br>
-            <div class="game-box">
-                <canvas id="canvas" width="1100" height="570"></canvas>
-            </div>
-            <script src="snake.js"></script>
-            <p id="game-status"></p>
-            <p id="game-score"></p>
-            <p></p>
-        </div>
-    </div>
-</div>
-
-</body>
-
+  
+    <script src="gptsnake.js"></script>
+    <link rel="stylesheet" type="text/css" href="gptcss.css">
+  </body>
 </html>
